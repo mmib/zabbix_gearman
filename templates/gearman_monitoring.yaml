@@ -1,0 +1,44 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: afc600560cfc4cf38052ff7f134c4910
+      template: Gearman
+      name: Gearman
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: 163e46ad147e4bac8b93a48a3d8a3442
+          name: 'Gearman function discovery'
+          type: ZABBIX_ACTIVE
+          key: 'gearman.lld[localhost,4730]'
+          item_prototypes:
+            - uuid: dda93517df2348ccad2fedf53d6a18d3
+              name: 'Gearman queued jobs [{#GMFUNC}]'
+              type: ZABBIX_ACTIVE
+              key: 'gearman.queued[{#GMFUNC},localhost,4730]'
+              trigger_prototypes:
+                - uuid: 0798abb6a5e3432e8e8d2301e98aad0e
+                  expression: 'avg(/Gearman/gearman.queued[{#GMFUNC},localhost,4730],10m)>500'
+                  name: 'Gearman: {#GMFUNC} backlog too large'
+                  priority: WARNING
+            - uuid: 48726c5c337f4dd48a686dae380b7ca3
+              name: 'Gearman running jobs [{#GMFUNC}]'
+              type: ZABBIX_ACTIVE
+              key: 'gearman.running[{#GMFUNC},localhost,4730]'
+            - uuid: 03203a2fce51463ebaeb01336857ee49
+              name: 'Gearman workers [{#GMFUNC}]'
+              type: ZABBIX_ACTIVE
+              key: 'gearman.workers[{#GMFUNC},localhost,4730]'
+              trigger_prototypes:
+                - uuid: 3eb2ff6f019c4744a239b0c9867158b3
+                  expression: 'min(/Gearman/gearman.workers[{#GMFUNC},localhost,4730],2m)<1'
+                  name: 'Gearman: {#GMFUNC} has NO workers'
+                  priority: AVERAGE
+          trigger_prototypes:
+            - uuid: e7c544ac02094ab7a4a994b1245e7728
+              expression: 'last(/Gearman/gearman.queued[{#GMFUNC},localhost,4730])>0 and sum(/Gearman/gearman.running[{#GMFUNC},localhost,4730],10m)=0'
+              name: 'Gearman: {#GMFUNC} queued but not running'
+              priority: AVERAGE
