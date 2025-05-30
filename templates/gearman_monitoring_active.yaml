@@ -39,6 +39,6 @@ zabbix_export:
                   priority: AVERAGE
           trigger_prototypes:
             - uuid: e7c544ac02094ab7a4a994b1245e7728
-              expression: 'last(/Gearman/gearman.queued[{#GMFUNC},localhost,4730])>0 and sum(/Gearman/gearman.running[{#GMFUNC},localhost,4730],10m)=0'
+              expression: 'last(/Gearman/gearman.queued[{#GMFUNC},localhost,4730],#1:now-1m)>0 and sum(/Gearman/gearman.running[{#GMFUNC},localhost,4730],10m)=0'
               name: 'Gearman: {#GMFUNC} queued but not running'
               priority: AVERAGE
