@@ -43,7 +43,7 @@ sudo cp scripts/gearman_*.sh /etc/zabbix/scripts/
 sudo chmod +x /etc/zabbix/scripts/gearman_*.sh
 
 # 3. Enable UserParameters
-sudo cp zabbix_agentd.d/template_gearman.conf /etc/zabbix/zabbix_agentd.conf.d/
+sudo cp zabbix_agentd.d/template_gearman.conf /etc/zabbix/zabbix_agentd.d/
 
 # 4. Restart agent
 sudo systemctl restart zabbix-agent   # or zabbix-agent2
