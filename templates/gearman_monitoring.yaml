@@ -34,7 +34,7 @@ zabbix_export:
               key: 'gearman.workers[{#GMFUNC},localhost,4730]'
               trigger_prototypes:
                 - uuid: 3eb2ff6f019c4744a239b0c9867158b3
-                  expression: 'min(/Gearman/gearman.workers[{#GMFUNC},localhost,4730],2m)<1'
+                  expression: 'max(/Gearman/gearman.workers[{#GMFUNC},localhost,4730],2m)<1'
                   name: 'Gearman: {#GMFUNC} has NO workers'
                   priority: AVERAGE
           trigger_prototypes:
